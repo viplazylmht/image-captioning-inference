@@ -1,0 +1,10 @@
+gunicorn
+gdown
+tensorflow==1.14
+click
+flask
+jinja2
+markupsafe
+itsdangerous
+flask_cors
+werkzeug
