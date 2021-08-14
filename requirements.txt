@@ -8,3 +8,5 @@ markupsafe
 itsdangerous
 flask_cors
 werkzeug
+rq
+redis
