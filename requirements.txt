@@ -10,4 +10,4 @@ flask_cors
 werkzeug
 rq
 redis
-sqlalchemy
+flask-sqlalchemy

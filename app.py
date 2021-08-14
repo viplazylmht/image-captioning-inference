@@ -10,7 +10,7 @@ from rq import Queue
 from rq.job import Job
 from worker import conn
 
-from sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 
 from models import heavy_task
 
