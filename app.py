@@ -79,8 +79,8 @@ def get_results(job_key):
         return "Nay!", 202
 
 def run():
-    #app.run(host='0.0.0.0', port=8080)
-    app.run()
+    app.run(host='0.0.0.0', port=process.env.PORT || 8080)
+    #app.run()
 
 def keep_alive():
 	t = Thread(target=run)
