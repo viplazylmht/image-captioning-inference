@@ -64,11 +64,17 @@ with g.as_default():
                                                checkpoint_path)
 g.finalize()
 
+print("G done")
+
 # Create the vocabulary.
 vocab = vocabulary.Vocabulary(vocab_file)
 
+print("vocab done")
+
 with tf.Session(graph=g) as sess:
     # Load the model from checkpoint.
+
+    print("tf session opened")
     restore_fn(sess)
 
     # Prepare the caption generator. Here we are implicitly using the default
@@ -76,6 +82,8 @@ with tf.Session(graph=g) as sess:
     # available beam search parameters.
     generator = caption_generator.CaptionGenerator(model, vocab)
 
+    print("generator initalized")
+    
     def caption_file(filename):
         print(filename)
         with tf.gfile.GFile(f"./static/UPLOAD/{filename}", "rb") as f:
