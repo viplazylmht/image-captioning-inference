@@ -10,6 +10,8 @@ from rq import Queue
 from rq.job import Job
 from worker import conn
 
+from sqlalchemy import SQLAlchemy
+
 from models import heavy_task
 
 UPLOAD_FOLDER = 'static/UPLOAD'
