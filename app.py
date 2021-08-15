@@ -6,13 +6,9 @@ import os
 
 from werkzeug.utils import secure_filename
 
-from rq import Queue
-from rq.job import Job
-from worker import conn
-
 from flask_sqlalchemy import SQLAlchemy
 
-from models import heavy_task
+from worker import TfThread
 
 UPLOAD_FOLDER = 'static/UPLOAD'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
@@ -29,7 +25,8 @@ db = SQLAlchemy(app)
 
 CORS(app)
 
-q = Queue(connection=conn)
+thread_task = TfThread(10, 'tfthread01')
+thread_task.start()
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -59,31 +56,27 @@ def prepare():
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-        job = q.enqueue_call(
-            func=heavy_task, args=(filename,), result_ttl=5000
-        )
+        job_id = thread_task.pushJob(f"{UPLOAD_FOLDER}/{filename}")
 
-        print(job.get_id())
+        print(job_id)
         
-        res = {'job_id': job.get_id()}
+        res = {'job_id': job_id}
         return json.dumps({"result": res})
 
 @app.route("/results/<job_key>", methods=['GET'])
 def get_results(job_key):
 
-    job = Job.fetch(job_key, connection=conn)
-
-    if job.is_finished:
-        return str(job.result), 200
+    job = thread_task.getResult(job_key)
+    
+    if job['status'] == 'completed':
+        return str(job), 200
     else:
-        return "Nay!", 202
+        return str(job), 202
 
 def run():
     app.run(threaded=True, host='0.0.0.0', port=int(os.getenv('PORT') if os.getenv('PORT') else 5000))
     #app.run()
 
-def keep_alive():
-	t = Thread(target=run)
-	t.start()
-
 run()
+
+thread_task.join() # wait for all task done

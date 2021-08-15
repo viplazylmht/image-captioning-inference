@@ -36,9 +36,7 @@ def heavy_task(filename):
 
     print("vocab done")
 
-    sess = tf.Session(graph=g)
-
-    with sess:
+    with tf.Session(graph=g) as sess:
         # Load the model from checkpoint.
 
         print("tf session opened")
