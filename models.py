@@ -2,20 +2,20 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+from im2txt.inference_utils import caption_generator, vocabulary
+from im2txt import configuration, inference_wrapper
+
 import math
 import os
 import io
 
 import tensorflow as tf
-#import error? : pip install numpy --upgrade
+# import error? : pip install numpy --upgrade
 print(tf.__version__)
 
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.INFO)
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
-from im2txt import configuration, inference_wrapper
-
-from im2txt.inference_utils import caption_generator, vocabulary
 
 def heavy_task(filepath):
     # Build the inference graph.
@@ -26,7 +26,7 @@ def heavy_task(filepath):
     with g.as_default():
         model = inference_wrapper.InferenceWrapper()
         restore_fn = model.build_graph_from_config(configuration.ModelConfig(),
-                                                checkpoint_path)
+                                                   checkpoint_path)
     g.finalize()
 
     print("G done")
@@ -61,6 +61,7 @@ def heavy_task(filepath):
             sentence = [vocab.id_to_word(w) for w in caption.sentence[1:-1]]
             sentence = " ".join(sentence)
 
-            result.append({ str(i): [sentence, math.exp(caption.logprob)]})
+            result.append({str(i): [sentence, math.exp(caption.logprob)]})
 
         return result
+        
