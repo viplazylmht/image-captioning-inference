@@ -73,9 +73,9 @@ def get_results(job_key):
     print(job)
 
     if job['status'] == 'completed':
-        return str(job), 200
+        return  json.dumps(job), 200
     else:
-        return str(job), 202
+        return  json.dumps(job), 202
 
 def run():
     app.run(threaded=True, host='0.0.0.0', port=int(os.getenv('PORT') if os.getenv('PORT') else 5000))
