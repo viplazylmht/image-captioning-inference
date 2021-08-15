@@ -7,6 +7,7 @@ import threading
 import time
 
 import hashlib
+import gdown
 
 exitFlag = 0
 queueLock = threading.Lock()
@@ -22,6 +23,12 @@ class TfThread (threading.Thread):
 
     def run(self):
         print("Starting " + self.name)
+
+        print("Downloading model parameters")
+        gdown.download('https://drive.google.com/uc?id=1r4-9FEIbOUyBSvA-fFVFgvhFpgee6sF5')
+
+        os.system('tar -xf im2txt_model_parameters.tar.gz')
+        os.system('rm im2txt_model_parameters.tar.gz')
 
         while True:
             process_data(self, self.q)

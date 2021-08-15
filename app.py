@@ -36,9 +36,9 @@ def allowed_file(filename):
 def main():
     return render_template('index.html')
 
-@app.route("/api/prepare", methods=["POST"])
-def prepare():
-    print('log prepare')
+@app.route("/api/v1/captionme", methods=["POST"])
+def captionme():
+    print('log captionme')
     
     if 'file' not in request.files:
         flash('No file part')
@@ -62,12 +62,16 @@ def prepare():
         
         res = {'job_id': job_id}
         return json.dumps({"result": res})
+    else:
+        return "File not found or not acceptable", 406
 
-@app.route("/results/<job_key>", methods=['GET'])
+@app.route("/api/v1/results/<job_key>", methods=['GET'])
 def get_results(job_key):
 
     job = thread_task.getResult(job_key)
     
+    print(job)
+
     if job['status'] == 'completed':
         return str(job), 200
     else:

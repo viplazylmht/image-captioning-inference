@@ -17,7 +17,7 @@ from im2txt import configuration, inference_wrapper
 
 from im2txt.inference_utils import caption_generator, vocabulary
 
-def heavy_task(filename):
+def heavy_task(filepath):
     # Build the inference graph.
     checkpoint_path = "./modelParameters/newmodel.ckpt-2000000"
     vocab_file = "./im2txt/data/Hugh/word_counts.txt"
@@ -49,12 +49,12 @@ def heavy_task(filename):
 
         print("generator initalized")
 
-        with tf.gfile.GFile(f"./static/UPLOAD/{filename}", "rb") as f:
+        with tf.gfile.GFile(filepath, "rb") as f:
             image = f.read()
         captions = generator.beam_search(sess, image)
 
         result = []
-        result.append(f"Captions for image {filename}:")
+        result.append(f"Captions for image {os.path.basename(filepath)}:")
 
         for i, caption in enumerate(captions):
             # Ignore begin and end words.
