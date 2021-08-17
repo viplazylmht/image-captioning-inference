@@ -17,14 +17,17 @@ function readURL(input) {
 $(function () {
     $('#upload').on('change', function () {
         readURL(input);
+
+        document.getElementById('message').textContent = 'The image uploaded will be rendered inside the box below.';
+        document.getElementById('mess_area').innerHTML = '';
     });
 });
 
 /*  ==========================================
     SHOW UPLOADED IMAGE NAME
 * ========================================== */
-var input = document.getElementById('upload');
-var infoArea = document.getElementById('upload-label');
+const input = document.getElementById('upload');
+const infoArea = document.getElementById('upload-label');
 
 input.addEventListener('change', showFileName);
 function showFileName(event) {

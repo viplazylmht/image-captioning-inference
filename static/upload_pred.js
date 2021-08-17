@@ -40,14 +40,15 @@ const reload_result = async (job_id) => {
 
     return res;
 };
-
+let haha;
 const caption_me = async () => {
     const file = fileInput.files[0];
 
     // handle file not found
-
+  
     const data = new FormData();
     data.append('file', file);
+    mess.textContent = 'Uploading...';
     mess_area.innerHTML = "";
 
     const processedImage = await fetch("/api/v1/captionme",
@@ -58,6 +59,12 @@ const caption_me = async () => {
             return response.json();
         }).then(result => {
             console.log(result);
+            haha = result;
+            if (result.error) {
+                mess.textContent = "Error: " + result.error;
+
+                return result;
+            }
 
             const job_id = result.result.job_id;
 

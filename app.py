@@ -46,17 +46,13 @@ def captionme():
     print('log captionme')
 
     if 'file' not in request.files:
-        flash('No file part')
-        return redirect(request.url)
+        return json.dumps({'error': "File not found"}), 406
     file = request.files['file']
     # If the user does not select a file, the browser submits an
     # empty file without a filename.
     if file.filename == '':
-        flash('No selected file')
-        return redirect(request.url)
+        return json.dumps({'error': "File not found"}), 406
     if file and allowed_file(file.filename):
-        # this import solves a rq bug which currently exists
-        from models import heavy_task
 
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -68,7 +64,7 @@ def captionme():
         res = {'job_id': job_id}
         return json.dumps({"result": res})
     else:
-        return "File not found or not acceptable", 406
+        return json.dumps({'error': "File not found or not acceptable"}), 406
 
 
 @app.route("/api/v1/results/<job_key>", methods=['GET'])
