@@ -23,7 +23,7 @@ const reload_result = async (job_id) => {
 
                 for (let i = 1; i < 4; i++) {
                     line = result.result[i][i - 1]
-                    s += '<p class="text-white">' + line[0] + ' with p =' + line[1] + "</p>";
+                    s += '<p class="text-white">' + i + ". " + line[0] + "</p>";
                 }
 
                 mess_area.innerHTML = s;
