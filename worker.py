@@ -9,7 +9,6 @@ import time
 import hashlib
 import gdown
 
-exitFlag = 0
 queueLock = threading.Lock()
 
 

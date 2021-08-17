@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
 
 from worker import TfThread
+from workerSync import TfThreadSync
 
 UPLOAD_FOLDER = 'static/UPLOAD'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
@@ -25,7 +26,8 @@ db = SQLAlchemy(app)
 
 CORS(app)
 
-thread_task = TfThread(10, 'tfthread01')
+# thread_task = TfThread(10, 'tfthread01')
+thread_task = TfThreadSync(10, 'tfthreadSync01')
 thread_task.start()
 
 

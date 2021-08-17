@@ -63,7 +63,7 @@ const caption_me = async () => {
 
             mess.textContent = 'Job ID created: ' + job_id;
 
-            auto_reload = setInterval(() => { reload_result(job_id); }, 2000);
+            auto_reload = setInterval(() => { reload_result(job_id); }, 1000);
 
             return result;
         });
