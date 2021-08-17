@@ -1,4 +1,5 @@
 gunicorn
+psycopg2
 gdown
 tensorflow==1.14
 click
