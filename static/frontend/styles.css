@@ -67,3 +67,8 @@ body {
     background-color: #614cb3;
     background-image: linear-gradient(147deg, #cdc0ff 0%, #614cb3 100%);
 }
+
+a, a:link, a:visited {
+    color: #5c004e;
+    text-decoration: none;
+  }
