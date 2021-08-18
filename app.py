@@ -3,6 +3,7 @@ from flask import Flask, request, json, jsonify, send_from_directory, flash, red
 import json
 import io
 import os
+import subprocess
 
 from werkzeug.utils import secure_filename
 
@@ -35,6 +36,9 @@ def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def check_file_extension(filepath):
+    ext = subprocess.check_output(f"file {filepath} | cut -d ',' -f 1 | cut -d ' ' -f 2", shell='True').decode('utf-8')[:-1]
+    return ext.lower() in ALLOWED_EXTENSIONS
 
 @app.route("/", methods=["GET"])
 def main():
@@ -57,6 +61,12 @@ def captionme():
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
+        if not check_file_extension(f"{UPLOAD_FOLDER}/{filename}"):
+            # client have trick on file extension, reject
+            os.system(f"rm {UPLOAD_FOLDER}/{filename}")
+            print("file checker not pass, rejecting...")
+            return json.dumps({'error': "File empty or not allowed"}), 406
+    
         job_id = thread_task.pushJob(f"{UPLOAD_FOLDER}/{filename}")
 
         print(job_id)
@@ -93,8 +103,8 @@ def cleanmee():
         if text:
             if text == os.getenv('CLEAN_PASSWORD'):
                 # todo: clean all upload file
-                os.system('rm static/UPLOAD/*')
-                os.system('touch static/UPLOAD/dummy')
+                os.system('rm {UPLOAD_FOLDER}/*')
+                os.system('touch {UPLOAD_FOLDER}/dummy')
 
                 res = {'message': "UPLOAD folder cleaned. Yay!"}
 
